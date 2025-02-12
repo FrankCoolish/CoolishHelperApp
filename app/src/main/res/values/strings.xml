@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">CoolishHelperApp</string>
+    <string name="quantity">Anzahl: %d</string>
+    <string name="grocery_list">Einkaufsliste</string>
+    <string name="all">Alle</string>
+    <string name="done">erledigt</string>
+    <string name="toDo">offen</string>
+    <string name="taskDeleted">%s gelöscht</string>
+</resources>
