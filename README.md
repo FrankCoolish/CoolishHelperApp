@@ -1,7 +1,7 @@
 # CoolishHelper
 
 ## Introduction
-This project will start as a grocerylist or todolist for multiple people. Therefore we need to build an app for mobilephones and a backend to realize communication between the different users. The main purpose of this project is to learn different technologies. After just copying tutorials for the App and Backend I decided to restart this project and fokus on the Google Developer Tutorials for Jetpackpack Compose to get a deeper Understanding of what is going on.
+This project will start as a grocerylist or todolist for multiple people. Therefore we need to build an app for mobilephones and a backend to realize communication between the different users. The main purpose of this project is to learn different technologies. After just copying tutorials for the App and Backend I decided to restart this project and fokus on the Google Developer Tutorials for Jetpackpack Compose to get a deeper understanding of what is going on.
 
 ## Table of Contents
 - [Installation and Deployment](<#installation-and-deployment>)
