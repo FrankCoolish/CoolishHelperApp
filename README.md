@@ -32,6 +32,8 @@ Nothing to install or deploy yet.
     - [x] add Filter
     - [x] delete Entry
       - [x] swipe left to delete
+    - [ ] add TaskScreen to edit tasks
+    - [ ] add Navigation between tasks
     - [ ] update Entry
     - [ ] add Entry
     - [x] add and use Viewmodel 
