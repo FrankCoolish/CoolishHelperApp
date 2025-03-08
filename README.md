@@ -5,8 +5,9 @@ This project will start as a grocerylist or todolist for multiple people. Theref
 
 ## Table of Contents
 - [Installation and Deployment](<#installation-and-deployment>)
-- [Usage](#usage)
 - [Structure and Technologies](<#structure-and-technologies>)
+- [Goals for first Prototype](#goals-for-first-prototype)
+- [Goals for second Prototype](#goals-for-second-prototype)
 - [Roadmap](#roadmap)
 
 ## Installation and Deployment
@@ -20,6 +21,12 @@ Nothing to install or deploy yet.
 ### Server/Backend
 - Springframework
 
+## Goals for first Prototype
+- an offline version with basic functionality (add/update/delete) to use on a Smartphone
+
+## Goals for second Prototype
+- communication with a Backend
+
 ## Roadmap
 - [x] Starting Readme.md
 
@@ -32,8 +39,6 @@ Nothing to install or deploy yet.
     - [x] add Filter
     - [x] delete Entry
       - [x] swipe left to delete
-    - [ ] add TaskScreen to edit tasks
-    - [ ] add Navigation between tasks
     - [ ] update Entry
     - [ ] add Entry
     - [x] add and use Viewmodel 
