@@ -19,6 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.coolishhelperapp.model.GroceryTask
 import com.example.coolishhelperapp.ui.theme.AppTheme
 
+/**
+ * The Card which represents an Item on the list. ALso holds some code for the Swipe left to delete functionality
+ */
 
 @Composable
 fun GroceryItemCard(

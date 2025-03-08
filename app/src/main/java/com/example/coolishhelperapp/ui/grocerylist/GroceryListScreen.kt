@@ -22,6 +22,10 @@ import com.example.coolishhelperapp.model.FilterType
 import com.example.coolishhelperapp.model.GroceryTask
 import com.example.coolishhelperapp.ui.theme.AppTheme
 
+/**
+ * Organizes the MainScreen with a topbar and bottombar. Basically it puts all together
+ */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroceryListScreen(

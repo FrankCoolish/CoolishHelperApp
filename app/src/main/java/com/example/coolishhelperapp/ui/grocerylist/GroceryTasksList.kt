@@ -20,6 +20,11 @@ import com.example.coolishhelperapp.R
 import com.example.coolishhelperapp.model.FilterType
 import com.example.coolishhelperapp.model.GroceryTask
 
+/**
+ * This class defines the List of Tasks as Composable. It also holds the logic for the filters.
+ * TODO: fin another place for filter logic
+ */
+
 @Composable
 fun GroceryTasksList(
     groceryList: List<GroceryTask>,

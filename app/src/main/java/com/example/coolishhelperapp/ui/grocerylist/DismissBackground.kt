@@ -13,6 +13,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.dimensionResource
 import com.example.coolishhelperapp.R
 
+/**
+ * Helper for swipe to delete functionality
+ */
+
 @Composable
 fun DismissBackground(dismissState: SwipeToDismissBoxState) {
     val color = when (dismissState.dismissDirection) {
