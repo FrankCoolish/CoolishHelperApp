@@ -22,10 +22,9 @@ class GroceryListViewModel(
     init {
         viewModelScope.launch {
             groceriesRepository.getAllGroceriesStream()
-                .collect { groceries ->
+                .collect{ groceries ->
                     _state.value = GroceryListState(groceries)
                 }
-
         }
     }
 
@@ -51,6 +50,23 @@ class GroceryListViewModel(
         viewModelScope.launch {
             groceriesRepository.updateGroceryTask(item)
         }
+    }
+
+    fun changeFilterState(filter: FilterType) {
+        _state.update { currentState ->
+            currentState.copy(
+                filter = filter
+            )
+        }
+    }
+
+    fun filterGroceryList(filter: FilterType, groceriesList: List<GroceryTask>): List<GroceryTask> {
+        val filteredList = when (filter) {
+            FilterType.SHOW_ALL -> groceriesList
+            FilterType.SHOW_DONE -> groceriesList.filter{ item -> item.checked}
+            FilterType.SHOW_TODO -> groceriesList.filter { item -> !item.checked}
+        }
+        return filteredList
     }
 }
 

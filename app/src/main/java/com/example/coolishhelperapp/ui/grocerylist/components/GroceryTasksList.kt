@@ -31,11 +31,6 @@ fun GroceryTasksList(
     onDelete: (GroceryTask) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val filteredList = when (filter) {
-        FilterType.SHOW_ALL -> groceryList
-        FilterType.SHOW_DONE -> groceryList.filter{ item -> item.checked}
-        FilterType.SHOW_TODO -> groceryList.filter { item -> !item.checked}
-    }
     LazyColumn(
         modifier = modifier,
         contentPadding = PaddingValues(dimensionResource(R.dimen.padding_small)),

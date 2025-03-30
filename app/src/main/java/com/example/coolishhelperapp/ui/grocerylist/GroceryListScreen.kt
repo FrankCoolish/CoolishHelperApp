@@ -16,12 +16,11 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.coolishhelperapp.R
+import com.example.coolishhelperapp.data.model.FilterType
 import com.example.coolishhelperapp.ui.AppViewModelProvider
 import com.example.coolishhelperapp.ui.grocerylist.components.GroceryItem
 import com.example.coolishhelperapp.ui.grocerylist.components.GroceryListAppBar
 import com.example.coolishhelperapp.ui.grocerylist.components.GroceryListButtonBar
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 
 
 /**
@@ -33,7 +32,6 @@ import kotlinx.coroutines.launch
 fun GroceryListScreen(modifier: Modifier = Modifier) {
     val viewModel: GroceryListViewModel =  viewModel(factory = AppViewModelProvider.Factory)
     val state by viewModel.state.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
 
     Scaffold (
         topBar = {
@@ -41,9 +39,9 @@ fun GroceryListScreen(modifier: Modifier = Modifier) {
                 GroceryListAppBar()
                 GroceryListButtonBar(
                     activeFilter = state.filter,
-                    changeFilterToAll = { /*groceryListViewModel.changeGroceryFilter(FilterType.SHOW_ALL)*/ },
-                    changeFilterToDone = { /*groceryListViewModel.changeGroceryFilter(FilterType.SHOW_DONE)*/ },
-                    changeFilterToToDo = { /*groceryListViewModel.changeGroceryFilter(FilterType.SHOW_TODO)*/ }
+                    changeFilterToAll = { viewModel.changeFilterState(FilterType.SHOW_ALL) },
+                    changeFilterToDone = {viewModel.changeFilterState(FilterType.SHOW_DONE) },
+                    changeFilterToToDo = { viewModel.changeFilterState(FilterType.SHOW_TODO) }
                 )
             }
         },
@@ -68,16 +66,14 @@ fun GroceryListScreen(modifier: Modifier = Modifier) {
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
             modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
         ) { items(
-            items = state.groceriesList,
+            items = viewModel.filterGroceryList(state.filter,state.groceriesList),
             key = { task -> task.id }
             ) { item ->
                 GroceryItem(
                     task = item,
                     onChecked =  { viewModel.updateGroceryTaskStatus(it, item.id) },
                     onDelete = {
-                        coroutineScope.launch {
                             viewModel.deleteGroceryItem(it)
-                        }
                     },
                     modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
                 )
@@ -96,9 +92,3 @@ fun FloatingActionButtonAddTask(onClick: () -> Unit) {
         Icon(Icons.Filled.Add, "Floating action button")
     }
 }
-
-/*@Preview(
-    uiMode = UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark",
-    showBackground = false
-)*/

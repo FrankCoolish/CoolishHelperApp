@@ -36,7 +36,7 @@ Nothing to install or deploy yet.
     - [x] First Layout
     - [x] Create Dummy Data
     - [x] Create List
-    - [ ] add Filter
+    - [x] add Filter
     - [x] delete Entry
     - [ ] update/edit Entry
       - [ ] add new Screen
