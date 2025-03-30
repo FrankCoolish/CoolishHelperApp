@@ -1,50 +1,63 @@
 package com.example.coolishhelperapp.ui.grocerylist
 
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
-import com.example.coolishhelperapp.data.DummyDataGroceryTasksList
-import com.example.coolishhelperapp.model.FilterType
-import com.example.coolishhelperapp.model.GroceryTask
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import androidx.lifecycle.viewModelScope
+import com.example.coolishhelperapp.data.GroceriesRepository
+import com.example.coolishhelperapp.data.model.FilterType
+import com.example.coolishhelperapp.data.model.GroceryTask
+import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 
-class GroceryListViewModel : ViewModel() {
+/**
+* ViewModel to retrieve all groceries in the Room database.
+*/
+class GroceryListViewModel(
+    private val groceriesRepository: GroceriesRepository
+) : ViewModel() {
 
-    //for now only used for filtering the List
-    private val _uiState = MutableStateFlow(GroceryListUiState())
-    val uiState: StateFlow<GroceryListUiState> = _uiState.asStateFlow()
+    private val _state = MutableStateFlow(GroceryListState())
+    val state: StateFlow<GroceryListState>
+        get() = _state
 
+    init {
+        viewModelScope.launch {
+            groceriesRepository.getAllGroceriesStream()
+                .collect { groceries ->
+                    _state.value = GroceryListState(groceries)
+                }
 
-    private val _tasks = getGroceryTasks().toMutableStateList()
-
-    val tasks: List<GroceryTask>
-        get() = _tasks
-
-
-    //get data from datalayer (for now it is just a HardcodedList)
-    private fun getGroceryTasks() = DummyDataGroceryTasksList.groceries
-
-    fun changeTaskChecked(item: GroceryTask, checked: Boolean) {
-        _tasks.find { it.id == item.id }
-            ?.let { task -> task.checked = checked }
-    }
-
-    fun changeGroceryFilter(filter: FilterType) {
-        _uiState.update { currentState ->
-            currentState.copy(
-                filter = filter
-            )
         }
     }
 
-    fun addTask(item: GroceryTask){
-        _tasks.add(item)
+    fun addBlankGroceryItem() {
+        viewModelScope.launch {
+            groceriesRepository.insertGroceryTask(GroceryTask(0,"NewItem", 1, false))
+        }
     }
 
-    fun removeTask(item: GroceryTask) {
-        _tasks.remove(item)
+    fun deleteGroceryItem(groceryTask: GroceryTask) {
+        viewModelScope.launch {
+            groceriesRepository.deleteGroceryTask(groceryTask)
+        }
     }
 
+    fun updateGroceryTaskStatus(selected: Boolean, id: Int) {
+        viewModelScope.launch {
+            groceriesRepository.updateGroceryTaskStatus(selected, id)
+        }
+    }
+
+    fun updateGroceryItem(item: GroceryTask) {
+        viewModelScope.launch {
+            groceriesRepository.updateGroceryTask(item)
+        }
+    }
 }
+
+/**
+ * Ui State for HomeScreen
+ */
+data class GroceryListState(
+    val groceriesList : List<GroceryTask> = emptyList(),
+    val filter: FilterType = FilterType.SHOW_ALL
+)

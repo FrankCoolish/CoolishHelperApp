@@ -1,26 +1,28 @@
 package com.example.coolishhelperapp.ui.grocerylist
 
-import android.content.res.Configuration.UI_MODE_NIGHT_NO
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.coolishhelperapp.R
-import com.example.coolishhelperapp.model.FilterType
-import com.example.coolishhelperapp.model.GroceryTask
-import com.example.coolishhelperapp.ui.theme.AppTheme
+import com.example.coolishhelperapp.ui.AppViewModelProvider
+import com.example.coolishhelperapp.ui.grocerylist.components.GroceryItem
+import com.example.coolishhelperapp.ui.grocerylist.components.GroceryListAppBar
+import com.example.coolishhelperapp.ui.grocerylist.components.GroceryListButtonBar
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+
 
 /**
  * Organizes the MainScreen with a topbar and bottombar. Basically it puts all together
@@ -28,22 +30,20 @@ import com.example.coolishhelperapp.ui.theme.AppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GroceryListScreen(
-    modifier: Modifier = Modifier,
-    groceryListViewModel: GroceryListViewModel = viewModel()
-)
-{   val listUiState by groceryListViewModel.uiState.collectAsState()
-    val task = GroceryTask(15,"newEntry",3,false)
+fun GroceryListScreen(modifier: Modifier = Modifier) {
+    val viewModel: GroceryListViewModel =  viewModel(factory = AppViewModelProvider.Factory)
+    val state by viewModel.state.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     Scaffold (
         topBar = {
             Column(modifier = modifier) {
-                CoolishHelperAppBar()
+                GroceryListAppBar()
                 GroceryListButtonBar(
-                    activeFilter = listUiState.filter,
-                    changeFilterToAll = { groceryListViewModel.changeGroceryFilter(FilterType.SHOW_ALL) },
-                    changeFilterToDone = { groceryListViewModel.changeGroceryFilter(FilterType.SHOW_DONE) },
-                    changeFilterToToDo = { groceryListViewModel.changeGroceryFilter(FilterType.SHOW_TODO) }
+                    activeFilter = state.filter,
+                    changeFilterToAll = { /*groceryListViewModel.changeGroceryFilter(FilterType.SHOW_ALL)*/ },
+                    changeFilterToDone = { /*groceryListViewModel.changeGroceryFilter(FilterType.SHOW_DONE)*/ },
+                    changeFilterToToDo = { /*groceryListViewModel.changeGroceryFilter(FilterType.SHOW_TODO)*/ }
                 )
             }
         },
@@ -59,96 +59,32 @@ fun GroceryListScreen(
         },
         floatingActionButton = {
             FloatingActionButtonAddTask(
-                onClick = {groceryListViewModel.addTask(task)}
+                onClick = { viewModel.addBlankGroceryItem() }
             )
-        }
+        }, floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
-        GroceryTasksList(
-            groceryList = groceryListViewModel.tasks,
-            filter = listUiState.filter,
-            paddingValues = innerPadding,
-            onCheckedTask = { task, checked ->
-                groceryListViewModel.changeTaskChecked(task, checked)
-            },
-            onDelete = {task -> groceryListViewModel.removeTask(task)}
-        )
-    }
-}
-
-
-@ExperimentalMaterial3Api
-@Composable
-fun CoolishHelperAppBar(){
-    CenterAlignedTopAppBar(
-        title = {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(R.string.grocery_list),
-                    style = MaterialTheme.typography.displayMedium,
-                    //color = MaterialTheme.colorScheme.secondary
-                )
-            }
-        },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
-        )
-    )
-}
-
-@ExperimentalMaterial3Api
-@Composable
-fun GroceryListButtonBar(
-    activeFilter:FilterType,
-    changeFilterToAll: () -> Unit,
-    changeFilterToDone: ()-> Unit,
-    changeFilterToToDo: () -> Unit
-){
-    CenterAlignedTopAppBar(
-        title = {
-           Row(
-               modifier = Modifier.padding(4.dp)
-           ) {
-                FilterButton(
-                    isSelected = activeFilter == FilterType.SHOW_ALL,
-                    label = stringResource( R.string.all ),
-                    onClick = changeFilterToAll,
-
-                )
-                Spacer(modifier = Modifier.weight(1f))
-                FilterButton(
-                    isSelected = activeFilter == FilterType.SHOW_DONE,
-                    label = stringResource(R.string.done),
-                    onClick =  changeFilterToDone,
-                )
-                Spacer(modifier = Modifier.padding(8.dp))
-                FilterButton(
-                    isSelected = activeFilter == FilterType.SHOW_TODO,
-                    label = stringResource(R.string.toDo),
-                    onClick = changeFilterToToDo,
+        LazyColumn(
+            contentPadding = innerPadding,
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
+        ) { items(
+            items = state.groceriesList,
+            key = { task -> task.id }
+            ) { item ->
+                GroceryItem(
+                    task = item,
+                    onChecked =  { viewModel.updateGroceryTaskStatus(it, item.id) },
+                    onDelete = {
+                        coroutineScope.launch {
+                            viewModel.deleteGroceryItem(it)
+                        }
+                    },
+                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
                 )
             }
         }
-    )
-}
 
-@Composable
-fun FilterButton(
-    label: String,
-    isSelected: Boolean,
-    onClick: ()-> Unit,
-    modifier: Modifier = Modifier
-) {
-    OutlinedButton(
-        onClick = onClick,
-        colors = if (isSelected) ButtonDefaults.filledTonalButtonColors()
-                else ButtonDefaults.outlinedButtonColors()
-    ) {
-        Text(label)
-        //Spacer(modifier = Modifier.padding(4.dp))
     }
-
 }
 
 @Composable
@@ -166,14 +102,3 @@ fun FloatingActionButtonAddTask(onClick: () -> Unit) {
     name = "DefaultPreviewDark",
     showBackground = false
 )*/
-@Preview(
-    uiMode = UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight",
-    showBackground = true
-)
-@Composable
-fun GroceryItemCardPreview() {
-    AppTheme {
-        GroceryListScreen()
-    }
-}

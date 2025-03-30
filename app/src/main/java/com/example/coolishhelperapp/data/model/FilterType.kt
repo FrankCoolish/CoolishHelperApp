@@ -1,4 +1,4 @@
-package com.example.coolishhelperapp.model
+package com.example.coolishhelperapp.data.model
 
 enum class FilterType {
     SHOW_ALL, SHOW_DONE, SHOW_TODO
