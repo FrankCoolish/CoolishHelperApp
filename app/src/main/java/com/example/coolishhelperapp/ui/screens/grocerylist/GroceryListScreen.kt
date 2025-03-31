@@ -1,4 +1,4 @@
-package com.example.coolishhelperapp.ui.grocerylist
+package com.example.coolishhelperapp.ui.screens.grocerylist
 
 import androidx.compose.runtime.getValue
 import androidx.compose.foundation.layout.*
@@ -18,9 +18,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.coolishhelperapp.R
 import com.example.coolishhelperapp.data.model.FilterType
 import com.example.coolishhelperapp.ui.AppViewModelProvider
-import com.example.coolishhelperapp.ui.grocerylist.components.GroceryItem
-import com.example.coolishhelperapp.ui.grocerylist.components.GroceryListAppBar
-import com.example.coolishhelperapp.ui.grocerylist.components.GroceryListButtonBar
+import com.example.coolishhelperapp.ui.screens.components.GroceryItem
+import com.example.coolishhelperapp.ui.screens.components.GroceryListTopAppBar
+import com.example.coolishhelperapp.ui.screens.components.GroceryListButtonBar
 
 
 /**
@@ -36,7 +36,7 @@ fun GroceryListScreen(modifier: Modifier = Modifier) {
     Scaffold (
         topBar = {
             Column(modifier = modifier) {
-                GroceryListAppBar()
+                GroceryListTopAppBar()
                 GroceryListButtonBar(
                     activeFilter = state.filter,
                     changeFilterToAll = { viewModel.changeFilterState(FilterType.SHOW_ALL) },

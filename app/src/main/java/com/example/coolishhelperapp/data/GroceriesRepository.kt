@@ -13,6 +13,12 @@ interface GroceriesRepository {
      */
     fun getAllGroceriesStream(): Flow<List<GroceryTask>>
 
+
+    /**
+     * Retrieve a grocerytask from the given data source that matches with the [id].
+     */
+    fun getGroceryTaskStream(id: Int): Flow<GroceryTask?>
+
     /**
      * Insert grocery in the data source
      */

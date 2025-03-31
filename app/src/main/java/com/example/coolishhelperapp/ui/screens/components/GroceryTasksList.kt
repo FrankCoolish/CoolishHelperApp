@@ -1,4 +1,4 @@
-package com.example.coolishhelperapp.ui.grocerylist.components
+package com.example.coolishhelperapp.ui.screens.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +12,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.coolishhelperapp.R
-import com.example.coolishhelperapp.data.helper.DummyDataGroceryTasksList
+import com.example.coolishhelperapp.data.util.GroceryTasksListDummy
 import com.example.coolishhelperapp.data.model.FilterType
 import com.example.coolishhelperapp.data.model.GroceryTask
 import com.example.coolishhelperapp.ui.theme.AppTheme
@@ -58,7 +58,7 @@ fun GroceryTasksList(
 fun GroceryTaskListPreview() {
     AppTheme {
         GroceryTasksList(
-            groceryList = DummyDataGroceryTasksList.groceries,
+            groceryList = GroceryTasksListDummy.groceriesDummyList,
             filter = FilterType.SHOW_ALL,
             paddingValues = PaddingValues(0.dp),
             onChecked = {},

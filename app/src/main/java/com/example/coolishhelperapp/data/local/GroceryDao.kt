@@ -19,6 +19,9 @@ interface GroceryDao {
     @Query("SELECT * from groceries")
     fun getAllGroceries(): Flow<List<GroceryTask>>
 
+    @Query("SELECT * from groceries WHERE id = :id")
+    fun getGrocery(id: Int): Flow<GroceryTask>
+
     @Query("UPDATE groceries SET checked = :isComplete WHERE id = :id")
     suspend fun updateStatus(isComplete: Boolean, id: Int)
 }

@@ -1,4 +1,4 @@
-package com.example.coolishhelperapp.ui.grocerylist
+package com.example.coolishhelperapp.ui.screens.grocerylist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

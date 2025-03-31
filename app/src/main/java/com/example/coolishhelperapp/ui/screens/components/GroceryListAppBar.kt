@@ -1,4 +1,4 @@
-package com.example.coolishhelperapp.ui.grocerylist.components
+package com.example.coolishhelperapp.ui.screens.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +14,7 @@ import com.example.coolishhelperapp.data.model.FilterType
 
 @ExperimentalMaterial3Api
 @Composable
-fun GroceryListAppBar(){
+fun GroceryListTopAppBar(){
     CenterAlignedTopAppBar(
         title = {
             Row(

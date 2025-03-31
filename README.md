@@ -18,6 +18,9 @@ Nothing to install or deploy yet.
 ### App
 - Android
 - Jetpack Compose
+- Room
+- MVVM
+- Repository
 ### Server/Backend
 - Springframework
 
@@ -39,8 +42,9 @@ Nothing to install or deploy yet.
     - [x] add Filter
     - [x] delete Entry
     - [ ] update/edit Entry
-      - [ ] add new Screen
-      - [ ] navigation with compose
+      - [x] add new Screen to edit Task
+        -[ ] add functionality to Buttons 
+      - [ ] add navigation with compose
     - [x] add Entry
     - [x] add and use Viewmodel 
     - [x] Store Data With Room

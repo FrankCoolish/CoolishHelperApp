@@ -16,4 +16,6 @@ class OfflineGroceriesRepository(private val groceryDao: GroceryDao) : Groceries
 
     override suspend fun updateGroceryTaskStatus(isComplete: Boolean, id: Int)  = groceryDao.updateStatus(isComplete, id)
 
+    override fun getGroceryTaskStream(id: Int): Flow<GroceryTask?> = groceryDao.getGrocery(id)
+
 }

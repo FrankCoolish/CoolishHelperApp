@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
-import com.example.coolishhelperapp.ui.grocerylist.GroceryListScreen
+import com.example.coolishhelperapp.ui.screens.grocerylist.GroceryListScreen
 import com.example.coolishhelperapp.ui.theme.AppTheme
 
 
