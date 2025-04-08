@@ -1,5 +1,6 @@
 package com.example.coolishhelperapp.ui.screens.groceryedit
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -21,10 +22,13 @@ class GroceryEditViewModel(
     private val groceriesRepository: GroceriesRepository
 ) : ViewModel() {
 
+    /**
+     * Holds current groceryTask ui state
+     */
     var groceryTaskUiState by mutableStateOf(GroceryTaskUiState())
         private set
 
-    private val groceryTaskId: Int = 0 /*checkNotNull(savedStateHandle[GroceryEditDestination.groceryIdArg])*/
+    private val groceryTaskId: Int =  checkNotNull(savedStateHandle[GroceryEditDestination.itemIdArg])
 
     init {
         viewModelScope.launch {
@@ -33,10 +37,37 @@ class GroceryEditViewModel(
                 .first()
                 .toGroceryTaskUiState()
         }
+        println("log this")
+        Log.i("EditScreenViewModel", "groceryTaskId: $groceryTaskUiState")
     }
+
+    fun updateUiState(groceryTaskDetails: GroceryTaskDetails) {
+        println("log this")
+        groceryTaskUiState = GroceryTaskUiState(groceryTaskDetails, true)
+    }
+
+    suspend fun saveGroceryTask() {
+        if(groceryTaskUiState.isEntryValid)
+            groceriesRepository.insertGroceryTask(groceryTaskUiState.groceryTaskDetails.toGroceryTask())
+    }
+
+    fun removeQuantity() {
+        if(groceryTaskUiState.groceryTaskDetails.toGroceryTask().quantity > 0) {
+            val quant = (groceryTaskUiState.groceryTaskDetails.quantity.toInt()-1).toString()
+            updateUiState(
+                groceryTaskUiState.groceryTaskDetails.copy(quantity = quant)
+            )
+        }
+    }
+
+    fun addQuantity() {
+        val quant = (groceryTaskUiState.groceryTaskDetails.quantity.toInt()+1).toString()
+        updateUiState(
+            groceryTaskUiState.groceryTaskDetails.copy(quantity = quant)
+        )
+    }
+
 }
-
-
 
 /**
  * Represents Ui State for a grocery.

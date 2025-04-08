@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
@@ -14,14 +15,31 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.coolishhelperapp.R
-import com.example.coolishhelperapp.data.util.GroceryTasksListDummy
+import com.example.coolishhelperapp.ui.AppViewModelProvider
+import com.example.coolishhelperapp.ui.navigation.NavigationDestination
 import com.example.coolishhelperapp.ui.screens.components.GroceryListTopAppBar
 import com.example.coolishhelperapp.ui.theme.AppTheme
+import kotlinx.coroutines.launch
+
+object GroceryEditDestination: NavigationDestination {
+    override val route = "edit"
+    override val titleRes = R.string.edit_entry
+    const val itemIdArg = "itemId"
+    val routeWithArgs = "$route/{$itemIdArg}"
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GroceryEditScreen(groceryTaskDetailsDummy: GroceryTaskUiState) {
+fun GroceryEditScreen(
+    modifier: Modifier = Modifier,
+    navigateBack: () -> Unit = {},
+    viewModel: GroceryEditViewModel = viewModel(factory = AppViewModelProvider.Factory)
+) {
+    println("groceryTaskEdit: ${viewModel.groceryTaskUiState}")
+    val coroutineScope = rememberCoroutineScope()
+
     Scaffold(
         topBar = {
             GroceryListTopAppBar(
@@ -29,11 +47,16 @@ fun GroceryEditScreen(groceryTaskDetailsDummy: GroceryTaskUiState) {
         }
     ) { innerPadding ->
         GroceryEditBody(
-            groceryUiState = GroceryTasksListDummy.groceryTaskDetailsDummy,
-            onGroceryValueChange = {},
-            onSaveClick = {},
-            onAddClick = {},
-            onSubtractClick = {},
+            groceryUiState = viewModel.groceryTaskUiState,
+            onGroceryValueChange = viewModel::updateUiState,
+            onSaveClick = {
+                coroutineScope.launch {
+                    viewModel.saveGroceryTask()
+                    navigateBack()
+                }
+            },
+            onAddClick = { viewModel.addQuantity() },
+            onSubtractClick = { viewModel.removeQuantity() },
             contentPadding = innerPadding,
             modifier = Modifier
 
@@ -68,7 +91,7 @@ fun GroceryEditBody(
             modifier = Modifier.fillMaxWidth()
         ) {
             Button(
-                onClick = {},
+                onClick = onSaveClick,
                 shape = MaterialTheme.shapes.small,
             ) { Icon(Icons.Rounded.Done, "save") }
         }
@@ -78,9 +101,9 @@ fun GroceryEditBody(
 @Composable
 fun GroceryInputForm(
     groceryDetails: GroceryTaskDetails,
-    onValuesChange: (GroceryTaskDetails) -> Unit,
-    onAddClick: (GroceryTaskDetails) -> Unit,
-    onSubtractClick: (GroceryTaskDetails) -> Unit
+    onValuesChange: (GroceryTaskDetails) -> Unit = {},
+    onAddClick: () -> Unit,
+    onSubtractClick: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_large)),
@@ -90,8 +113,8 @@ fun GroceryInputForm(
     ) {
         OutlinedTextField(
             value = groceryDetails.name,
+            onValueChange = { onValuesChange(groceryDetails.copy(name = it)) },
             label = { Text(stringResource(R.string.name)) },
-            onValueChange = {},
             modifier = Modifier.fillMaxWidth()
         )
         Row (
@@ -102,15 +125,14 @@ fun GroceryInputForm(
                 value = groceryDetails.quantity,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 label = { Text(stringResource(R.string.quantity_label)) },
-                onValueChange = {},
+                onValueChange = { onValuesChange(groceryDetails.copy(quantity = it))},
                 modifier = Modifier.weight(1f)
             )
-
             ElevatedButton(
-                onClick = {}
+                onClick = { onAddClick() }
             ) { Icon(painterResource(R.drawable.add), "add quantity") }
             ElevatedButton(
-                onClick = {}
+                onClick = { onSubtractClick()}
             ) { Icon(painterResource(R.drawable.remove), "remove quantity") }
         }
     }
@@ -121,9 +143,7 @@ fun GroceryInputForm(
 @Composable
 fun GroceryEditScreenPreview() {
     AppTheme {
-        GroceryEditScreen(
-            GroceryTasksListDummy.groceryTaskDetailsDummy,
-            )
+        GroceryEditScreen()
     }
 }
 

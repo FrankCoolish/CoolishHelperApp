@@ -8,4 +8,7 @@
     <string name="toDo">offen</string>
     <string name="taskDeleted">%s gelöscht</string>
     <string name="name">Name</string>
+    <string name="edit_entry">bearbeiten</string>
+    <string name="new_item_entry">**klick mich**</string>
+    <string name="bottomAppBar">Feedback erwünscht</string>
 </resources>

@@ -1,9 +1,12 @@
-package com.example.coolishhelperapp.data.util
+package com.example.coolishhelperapp.util
 
 import com.example.coolishhelperapp.data.model.GroceryTask
 import com.example.coolishhelperapp.ui.screens.groceryedit.GroceryTaskDetails
 import com.example.coolishhelperapp.ui.screens.groceryedit.GroceryTaskUiState
 
+/**
+ * some dummy Data for development purposes
+ */
 object GroceryTasksListDummy {
      var groceriesDummyList = mutableListOf<GroceryTask>(
           GroceryTask(1, "Bread", 1, false),

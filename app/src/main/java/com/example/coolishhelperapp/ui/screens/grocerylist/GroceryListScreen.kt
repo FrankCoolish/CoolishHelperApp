@@ -13,15 +13,21 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.coolishhelperapp.R
 import com.example.coolishhelperapp.data.model.FilterType
 import com.example.coolishhelperapp.ui.AppViewModelProvider
+import com.example.coolishhelperapp.ui.navigation.NavigationDestination
 import com.example.coolishhelperapp.ui.screens.components.GroceryItem
 import com.example.coolishhelperapp.ui.screens.components.GroceryListTopAppBar
 import com.example.coolishhelperapp.ui.screens.components.GroceryListButtonBar
 
+object GroceryListDestination: NavigationDestination {
+    override val route =  "groceryList"
+    override val titleRes = R.string.grocery_list
+}
 
 /**
  * Organizes the MainScreen with a topbar and bottombar. Basically it puts all together
@@ -29,7 +35,10 @@ import com.example.coolishhelperapp.ui.screens.components.GroceryListButtonBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GroceryListScreen(modifier: Modifier = Modifier) {
+fun GroceryListScreen(
+    navigateToGroceryTaskEdit: (Int) -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     val viewModel: GroceryListViewModel =  viewModel(factory = AppViewModelProvider.Factory)
     val state by viewModel.state.collectAsState()
 
@@ -52,7 +61,7 @@ fun GroceryListScreen(modifier: Modifier = Modifier) {
                     .clip(RoundedCornerShape(15.dp, 15.dp,0.dp, 0.dp)),
 
             ) {
-                Text("BottomAppbarPlaceHolder")
+                Text(stringResource(R.string.bottomAppBar))
             }
         },
         floatingActionButton = {
@@ -62,20 +71,23 @@ fun GroceryListScreen(modifier: Modifier = Modifier) {
         }, floatingActionButtonPosition = FabPosition.Center
     ) { innerPadding ->
         LazyColumn(
+            reverseLayout = true,
             contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.padding_small)),
-            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small)),
+            modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
         ) { items(
             items = viewModel.filterGroceryList(state.filter,state.groceriesList),
             key = { task -> task.id }
             ) { item ->
                 GroceryItem(
                     task = item,
+                    onGroceryTaskClick = navigateToGroceryTaskEdit,
                     onChecked =  { viewModel.updateGroceryTaskStatus(it, item.id) },
                     onDelete = {
                             viewModel.deleteGroceryItem(it)
                     },
-                    modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+                    modifier = Modifier
+                        .padding(dimensionResource(R.dimen.padding_small))
                 )
             }
         }
@@ -84,7 +96,9 @@ fun GroceryListScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun FloatingActionButtonAddTask(onClick: () -> Unit) {
+fun FloatingActionButtonAddTask(
+    onClick: () -> Unit
+) {
     FloatingActionButton(
         onClick = { onClick() },
         shape = CircleShape

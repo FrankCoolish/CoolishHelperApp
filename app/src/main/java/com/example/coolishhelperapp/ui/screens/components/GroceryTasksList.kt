@@ -12,7 +12,7 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.coolishhelperapp.R
-import com.example.coolishhelperapp.data.util.GroceryTasksListDummy
+import com.example.coolishhelperapp.util.GroceryTasksListDummy
 import com.example.coolishhelperapp.data.model.FilterType
 import com.example.coolishhelperapp.data.model.GroceryTask
 import com.example.coolishhelperapp.ui.theme.AppTheme

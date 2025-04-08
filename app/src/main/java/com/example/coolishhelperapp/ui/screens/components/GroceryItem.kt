@@ -1,6 +1,7 @@
 package com.example.coolishhelperapp.ui.screens.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_NO
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Delete
@@ -20,12 +21,14 @@ import com.example.coolishhelperapp.ui.theme.AppTheme
 @Composable
 fun GroceryItem(
     task: GroceryTask,
+    onGroceryTaskClick: (Int) -> Unit = {},
     onChecked: (Boolean) -> Unit,
     onDelete: (GroceryTask) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(modifier = Modifier
         .fillMaxWidth()
+        .clickable { onGroceryTaskClick(task.id) }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

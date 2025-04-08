@@ -34,17 +34,17 @@ Nothing to install or deploy yet.
 - [x] Starting Readme.md
 
 - [ ] Building Androidapp
-  - [ ] Getting started (First Prototype) usable for one user in offline mode 
+  - [x] Getting started (First Prototype) usable for one user in offline mode 
     - [x] Find Materialtheme Builder
     - [x] First Layout
     - [x] Create Dummy Data
     - [x] Create List
     - [x] add Filter
     - [x] delete Entry
-    - [ ] update/edit Entry
+    - [x] update/edit Entry
       - [x] add new Screen to edit Task
-        -[ ] add functionality to Buttons 
-      - [ ] add navigation with compose
+        -[x] add functionality to Buttons 
+      - [x] add navigation with compose
     - [x] add Entry
     - [x] add and use Viewmodel 
     - [x] Store Data With Room

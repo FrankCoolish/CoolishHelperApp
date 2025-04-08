@@ -1,7 +1,9 @@
 package com.example.coolishhelperapp.ui.screens.grocerylist
 
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.coolishhelperapp.R
 import com.example.coolishhelperapp.data.GroceriesRepository
 import com.example.coolishhelperapp.data.model.FilterType
 import com.example.coolishhelperapp.data.model.GroceryTask
@@ -30,7 +32,7 @@ class GroceryListViewModel(
 
     fun addBlankGroceryItem() {
         viewModelScope.launch {
-            groceriesRepository.insertGroceryTask(GroceryTask(0,"NewItem", 1, false))
+            groceriesRepository.insertGroceryTask(GroceryTask(0, "", 1, false))
         }
     }
 
